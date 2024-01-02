@@ -10,7 +10,7 @@
   	measurementId: "G-Y3H2W0K79V"
   };
   firebase.initializeApp(firebaseConfig);
-
+//change
   // Function to update usernameHeader
   function updateUsernameHeader(user) {
     const usernameHeader = document.getElementById('usernameHeader');
