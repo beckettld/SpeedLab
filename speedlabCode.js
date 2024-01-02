@@ -7,37 +7,6 @@
       usernameHeader.textContent = ''; // Set to empty string when no user
     }
   }
-  
-  //start user sign in logic.
-  // Function to handle redirection after authentication state change
-function handleAuthRedirection(user) {
-  if (user) {
-    // User is signed in
-    updateUsernameHeader(user);
-
-    // Redirect to previously saved URL if it exists
-    const redirectUrl = sessionStorage.getItem('redirectAfterLogin');
-    if (redirectUrl && window.location.href !== redirectUrl) {
-      window.location.href = redirectUrl;
-      sessionStorage.removeItem('redirectAfterLogin'); // Clear the stored URL
-    } else if (window.location.pathname === '/') {
-      // Redirect to dashboard if on home page
-      window.location.href = '/dashboard';
-    }
-  } else {
-    // User is signed out
-    console.log('User signed out');
-    updateUsernameHeader(null);
-
-    // Redirect to home page if not already there
-    if (window.location.pathname !== '/' && window.location.pathname !== '/login') {
-      sessionStorage.setItem('redirectAfterLogin', window.location.href);
-      window.location.href = '/';
-    }
-  }
-}
-
-
 
 // Set up sign-in logic
 if (window.location.pathname === '/' || window.location.pathname === '') {
@@ -368,6 +337,7 @@ function updateTransactionTable(transactions, userId) {
     var buyerOngoingTableBody = document.getElementById('buyerOngoingTransactionTableBody');
     var buyerCompletedTableBody = document.getElementById('buyerCompletedTransactionTableBody');
 
+    console.log(document.getElementById('sellerOngoingTransactionTableBody'));
     // Clear existing table rows
     sellerOngoingTableBody.innerHTML = '';
     sellerCompletedTableBody.innerHTML = '';
