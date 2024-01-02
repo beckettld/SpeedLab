@@ -322,7 +322,10 @@ document.addEventListener("DOMContentLoaded", function() {
         transactionsRef.once('value', function(snapshot) {
             console.log("Transactions:", snapshot.val());
             var transactions = snapshot.val();
-            updateTransactionTable(transactions, user.uid);
+            //if the slug is /dashboard update transaction table
+            if (window.location.pathname === '/dashboard') {
+                updateTransactionTable(transactions, user.uid);
+            }
         });
     } else {
         console.log("User not signed in");
@@ -386,7 +389,7 @@ function updateTransactionTable(transactions, userId) {
 }
 
 function redirectToTransactionDetails(transactionId) {
-    window.location.href = `https://speedlab.webflow.io/reviewtransaction?id=${transactionId}`;
+    window.location.href = `https://speedlab.webflow.io/transactionpage?id=${transactionId}`;
 }
 
 //Transaction page logic
@@ -416,13 +419,12 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function displayTransactionPageData(transactionData) {
-    // Access each element by ID and update its content
-    document.getElementById('transactionpageselleremail').textContent = transactionData.sellerUserEmail || 'N/A';
-    document.getElementById('transactionpagebuyeremail').textContent = transactionData.buyerUserEmail || 'N/A';
-    document.getElementById('transactionpageamount').textContent = transactionData.amount || 'N/A';
-    document.getElementById('transactionpagedescription').textContent = transactionData.description || 'N/A';
-    document.getElementById('transactionpagemessage').textContent = transactionData.message || 'N/A';
-
+    // Access each element by ID and update its content 
+    document.getElementById('transactionpageselleremail').textContent = 'Seller: ' + (transactionData.sellerUserEmail || 'N/A');
+    document.getElementById('transactionpagebuyeremail').textContent = 'Buyer: ' + (transactionData.buyerUserEmail || 'N/A');
+    document.getElementById('transactionpageamount').textContent = 'Amount: $' + (transactionData.amount || 'N/A');
+    document.getElementById('transactionpagedescription').textContent = 'Description: ' + (transactionData.description || 'N/A');
+    document.getElementById('transactionpagemessage').textContent = 'Message: ' + (transactionData.message || 'N/A');
     // Handle buyer files - assuming these are file URLs or keys
     var buyerFilesContainer = document.getElementById('transactionpagebuyerfiles');
     buyerFilesContainer.innerHTML = ''; // Clear previous content
