@@ -1,16 +1,3 @@
-
-  var firebaseConfig = {
-    apiKey: "AIzaSyBQguFel0NDPxwC-KGJhfYdXvWJcdKMMxQ",
-    authDomain: "speedlab1-7f02c.firebaseapp.com",
-    databaseURL: "https://speedlab1-7f02c-default-rtdb.firebaseio.com",
-  	projectId: "speedlab1-7f02c",
-  	storageBucket: "speedlab1-7f02c.appspot.com",
-  	messagingSenderId: "298559435817",
-  	appId: "1:298559435817:web:5b3f63875ee9dda4ef5838",
-  	measurementId: "G-Y3H2W0K79V"
-  };
-  firebase.initializeApp(firebaseConfig);
-//change
   // Function to update usernameHeader
   function updateUsernameHeader(user) {
     const usernameHeader = document.getElementById('usernameHeader');
@@ -50,8 +37,7 @@ function handleAuthRedirection(user) {
   }
 }
 
-// Initialize auth state change listener
-firebase.auth().onAuthStateChanged(handleAuthRedirection);
+
 
 // Set up sign-in logic
 if (window.location.pathname === '/' || window.location.pathname === '') {
