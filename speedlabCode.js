@@ -106,7 +106,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
-
 function getTransactionIdFromUrl() {
     var urlParams = new URLSearchParams(window.location.search);
     return urlParams.get('id');
@@ -411,7 +410,7 @@ document.addEventListener("DOMContentLoaded", function() {
             fetchUniqueTransactionData(transactionId).then(transactionData => {
                 if (transactionData) {
                     displayTransactionPageData(transactionData);
-                    addAudioPlayers(transactionData.buyerFiles, 'buyerAudioFilesContainer');
+                    transactionData.buyerFiles.forEach(fileKey => fetchFileUrlAndPlay(fileKey, 'buyerAudioFilesContainer'));
                 } else {
                     console.log("Buyer Transaction data not found for ID:", transactionId);
                 }
@@ -441,11 +440,41 @@ document.addEventListener("DOMContentLoaded", function() {
             }).catch(error => {
                 console.error("Error fetching Seller Transaction data:", error);
             });
+
+            var completeTransactionForm = document.getElementById('completetransactionform');
+            if (completeTransactionForm) {
+                completeTransactionForm.addEventListener('submit', function(event) {
+                    event.preventDefault(); // Prevent the default form submission
+
+                    var fileInput = document.getElementById('transactionPageSellerFileSubmit');
+                    if (fileInput && fileInput.files.length > 0) {
+                        uploadFiles(fileInput.files, transactionId).then(fileKeys => {
+                            updateSellerFilesInTransaction(transactionId, fileKeys).then(() => {
+                                console.log('Seller files uploaded and updated in transaction.');
+                            }).catch(error => {
+                                console.error('Error updating seller files in transaction:', error);
+                            });
+                        }).catch(error => {
+                            console.error('Error uploading files:', error);
+                        });
+                    }
+                });
+            }
         } else {
             console.log("No Seller Transaction ID found in URL");
         }
     }
 });
+
+
+function updateSellerFilesInTransaction(transactionId, fileKeys) {
+    return new Promise((resolve, reject) => {
+        var transactionRef = firebase.database().ref('/uniqueTransactions/' + transactionId);
+        transactionRef.update({ sellerFiles: fileKeys })
+            .then(resolve)
+            .catch(reject);
+    });
+}
 
 function displayTransactionPageData(transactionData) {
     // Update transaction information
@@ -479,26 +508,25 @@ function addAudioPlayers(fileUrls, containerId) {
     container.innerHTML = ''; // Clear existing content
 
     if (fileUrls && fileUrls.length > 0) {
-        fileUrls.forEach(url => {
+        fileUrls.forEach(fileUrl => {
             const playerContainer = document.createElement('div');
             playerContainer.style.width = '100%';
             playerContainer.style.marginBottom = '10px';
 
-            const videoPlayer = document.createElement('video');
-            videoPlayer.controls = true;
-            videoPlayer.autoplay = false; // Set to false for user control
-            videoPlayer.name = 'media';
-            videoPlayer.style.width = '100%';
+            const audioPlayer = document.createElement('video');
+            audioPlayer.controls = true;
+            audioPlayer.style.width = '100%';
+            audioPlayer.style.height = '30px'; // Reduce the height to minimize the margin
 
             const source = document.createElement('source');
-            source.src = url;
-            source.type = 'audio/mpeg'; // Assuming your files are in mp3 format
+            source.src = fileUrl;
+            source.type = 'audio/' + fileUrl.split('.').pop(); // Dynamically set the MIME type
 
-            videoPlayer.appendChild(source);
-            playerContainer.appendChild(videoPlayer);
+            audioPlayer.appendChild(source);
+            playerContainer.appendChild(audioPlayer);
 
             const downloadLink = document.createElement('a');
-            downloadLink.href = url;
+            downloadLink.href = fileUrl;
             downloadLink.download = true;
             downloadLink.textContent = 'Download';
             downloadLink.style.display = 'block';
@@ -513,3 +541,4 @@ function addAudioPlayers(fileUrls, containerId) {
         container.appendChild(noFilesMessage);
     }
 }
+
