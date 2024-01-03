@@ -476,30 +476,29 @@ function fetchFileUrlAndPlay(fileKey, containerId) {
 
 function addAudioPlayers(fileUrls, containerId) {
     const container = document.getElementById(containerId);
-    container.innerHTML = '';
+    container.innerHTML = ''; // Clear existing content
 
-    if (fileUrls.length === 0) {
-        container.textContent = 'No audio files available.';
-    } else {
+    if (fileUrls && fileUrls.length > 0) {
         fileUrls.forEach(url => {
             const playerContainer = document.createElement('div');
             playerContainer.style.width = '100%';
             playerContainer.style.marginBottom = '10px';
 
-            const audioPlayer = document.createElement('audio');
-            audioPlayer.controls = true;
-            audioPlayer.style.width = '100%';
+            const videoPlayer = document.createElement('video');
+            videoPlayer.controls = true;
+            videoPlayer.autoplay = false; // Set to false for user control
+            videoPlayer.name = 'media';
+            videoPlayer.style.width = '100%';
 
             const source = document.createElement('source');
             source.src = url;
-            source.type = 'audio/' + url.split('.').pop(); 
+            source.type = 'audio/mpeg'; // Assuming your files are in mp3 format
 
-            audioPlayer.appendChild(source);
-            playerContainer.appendChild(audioPlayer);
+            videoPlayer.appendChild(source);
+            playerContainer.appendChild(videoPlayer);
 
             const downloadLink = document.createElement('a');
             downloadLink.href = url;
-            downloadLink.target = '_blank'; // Opens in new tab
             downloadLink.download = true;
             downloadLink.textContent = 'Download';
             downloadLink.style.display = 'block';
@@ -507,10 +506,10 @@ function addAudioPlayers(fileUrls, containerId) {
 
             playerContainer.appendChild(downloadLink);
             container.appendChild(playerContainer);
-
-            // Debug log for audio player
-            console.log(`Added audio player for: ${url}`);
         });
+    } else {
+        const noFilesMessage = document.createElement('p');
+        noFilesMessage.textContent = 'No files available for playback.';
+        container.appendChild(noFilesMessage);
     }
 }
-
