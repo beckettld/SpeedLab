@@ -479,11 +479,14 @@ function displayTransactionFiles(transactionData) {
 }
 
 function addAudioPlayers(fileUrls, containerId) {
+    console.log(fileUrls)
+    console.log(containerId)
     const container = document.getElementById(containerId);
     container.innerHTML = ''; // Clear existing content
 
     if (fileUrls && fileUrls.length > 0) {
         fileUrls.forEach(fileUrl => {
+            console.log(fileUrl)
             const playerContainer = document.createElement('div');
             playerContainer.style.width = '100%';
             playerContainer.style.marginBottom = '10px';
