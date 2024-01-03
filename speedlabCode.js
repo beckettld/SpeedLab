@@ -508,24 +508,33 @@ function addAudioPlayers(fileUrls, containerId) {
     container.innerHTML = ''; // Clear existing content
 
     if (fileUrls && fileUrls.length > 0) {
-        fileUrls.forEach(fileUrl => {
-            const audioPlayer = document.createElement('video');
-            audioPlayer.controls = true;
+        fileUrls.forEach(url => {
+            const playerContainer = document.createElement('div');
+            playerContainer.style.width = '100%';
+            playerContainer.style.marginBottom = '10px';
+
+            const videoPlayer = document.createElement('video');
+            videoPlayer.controls = true;
+            videoPlayer.autoplay = false; // Set to false for user control
+            videoPlayer.name = 'media';
+            videoPlayer.style.width = '100%';
 
             const source = document.createElement('source');
-            source.src = fileUrl;
-            source.type = 'audio/' + fileUrl.split('.').pop(); // Dynamically set the MIME type
+            source.src = url;
+            source.type = 'audio/mpeg'; // Assuming your files are in mp3 format
 
-            audioPlayer.appendChild(source);
-            container.appendChild(audioPlayer);
+            videoPlayer.appendChild(source);
+            playerContainer.appendChild(videoPlayer);
 
             const downloadLink = document.createElement('a');
-            downloadLink.href = fileUrl;
+            downloadLink.href = url;
             downloadLink.download = true;
             downloadLink.textContent = 'Download';
             downloadLink.style.display = 'block';
+            downloadLink.style.marginTop = '5px';
 
-            container.appendChild(downloadLink);
+            playerContainer.appendChild(downloadLink);
+            container.appendChild(playerContainer);
         });
     } else {
         const noFilesMessage = document.createElement('p');
@@ -533,5 +542,3 @@ function addAudioPlayers(fileUrls, containerId) {
         container.appendChild(noFilesMessage);
     }
 }
-
-
