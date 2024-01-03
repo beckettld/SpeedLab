@@ -479,7 +479,7 @@ function addAudioPlayers(fileUrls, containerId) {
     container.innerHTML = '';
 
     if (fileUrls.length === 0) {
-        container.textContent = 'No files here';
+        container.textContent = 'No audio files available.';
     } else {
         fileUrls.forEach(url => {
             const playerContainer = document.createElement('div');
@@ -499,6 +499,7 @@ function addAudioPlayers(fileUrls, containerId) {
 
             const downloadLink = document.createElement('a');
             downloadLink.href = url;
+            downloadLink.target = '_blank'; // Opens in new tab
             downloadLink.download = true;
             downloadLink.textContent = 'Download';
             downloadLink.style.display = 'block';
@@ -506,6 +507,10 @@ function addAudioPlayers(fileUrls, containerId) {
 
             playerContainer.appendChild(downloadLink);
             container.appendChild(playerContainer);
+
+            // Debug log for audio player
+            console.log(`Added audio player for: ${url}`);
         });
     }
 }
+
