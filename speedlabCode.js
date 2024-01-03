@@ -1,3 +1,6 @@
+  const WEBSITEURL = "https://speedlab.webflow.io"
+  
+  
   // Function to update usernameHeader
   function updateUsernameHeader(user) {
     const usernameHeader = document.getElementById('usernameHeader');
@@ -59,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function() {
               newTransactionRef.set(formData).then(function() {
                   console.log("Transaction data saved successfully.");
                 
-              var customLink = 'https://speedlab.webflow.io/finishsetuptransaction?id='+transactionKey;
+              var customLink = WEBSITEURL+'/finishsetuptransaction?id='+transactionKey;
               console.log("Transaction link: ", customLink);
                 
               var linkMessageElement = document.getElementById('transactionlinkmessage');
@@ -271,7 +274,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     if (payButton) {
                         payButton.addEventListener('click', function() {
                             updateTransactionStateToPaid(transactionId).then(() => {
-                                window.location.href = `https://speedlab.webflow.io/transactionpage?id=${transactionId}`;
+                                window.location.href = WEBSITEURL+`/transactionpage?id=${transactionId}`;
                             }).catch(error => {
                                 console.error("Error updating transaction state:", error);
                             });
@@ -361,8 +364,8 @@ function updateTransactionTable(transactions, userId) {
             const isCompleted = transaction.currentState === 'complete';
 
             var redirectUrl = transaction.sellerUserId === userId 
-            ? `https://speedlab.webflow.io/transactionpageseller?id=${key}`
-            : `https://speedlab.webflow.io/transactionpagebuyer?id=${key}`;
+            ? WEBSITEURL+`/transactionpageseller?id=${key}`
+            : WEBSITEURL+`/transactionpagebuyer?id=${key}`;
 
 
             var row = document.createElement('tr');
@@ -373,7 +376,7 @@ function updateTransactionTable(transactions, userId) {
                 <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;"><button onclick="window.location.href='${redirectUrl}'">Details</button></td>
             `;
 
-
+ 
             // Categorize and append the row to the corresponding table
             if (transaction.sellerUserId === userId) {
                 if (isCompleted) {
@@ -394,7 +397,7 @@ function updateTransactionTable(transactions, userId) {
 }
 
 function redirectToTransactionDetails(transactionId) {
-    window.location.href = `https://speedlab.webflow.io/transactionpage?id=${transactionId}`;
+    window.location.href = WEBSITEURL+`/transactionpage?id=${transactionId}`;
 }
 
 //Transaction page logic
