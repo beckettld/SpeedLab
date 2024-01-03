@@ -411,6 +411,7 @@ document.addEventListener("DOMContentLoaded", function() {
             fetchUniqueTransactionData(transactionId).then(transactionData => {
                 if (transactionData) {
                     displayTransactionPageData(transactionData);
+                    addAudioPlayers(transactionData.buyerFiles, 'buyerAudioFilesContainer');
                 } else {
                     console.log("Buyer Transaction data not found for ID:", transactionId);
                 }
@@ -433,6 +434,7 @@ document.addEventListener("DOMContentLoaded", function() {
             fetchUniqueTransactionData(transactionId).then(transactionData => {
                 if (transactionData) {
                     displayTransactionPageData(transactionData);
+                    addAudioPlayers(transactionData.buyerFiles, 'buyerAudioFilesContainer');
                 } else {
                     console.log("Seller Transaction data not found for ID:", transactionId);
                 }
@@ -447,37 +449,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 function displayTransactionPageData(transactionData) {
-    // Access each element by ID and update its content 
+    // Update transaction information
     document.getElementById('transactionpageselleremail').textContent = 'Seller: ' + (transactionData.sellerUserEmail || 'N/A');
     document.getElementById('transactionpagebuyeremail').textContent = 'Buyer: ' + (transactionData.buyerUserEmail || 'N/A');
     document.getElementById('transactionpageamount').textContent = 'Amount: $' + (transactionData.amount || 'N/A');
     document.getElementById('transactionpagedescription').textContent = 'Description: ' + (transactionData.description || 'N/A');
     document.getElementById('transactionpagemessage').textContent = 'Message: ' + (transactionData.message || 'N/A');
-    // Handle buyer files - assuming these are file URLs or keys
-    var buyerFilesContainer = document.getElementById('transactionpagebuyerfiles');
-    buyerFilesContainer.innerHTML = ''; // Clear previous content
-    if (transactionData.buyerFiles && transactionData.buyerFiles.length > 0) {
-        transactionData.buyerFiles.forEach(fileKey => {
-            var fileElement = document.createElement('div');
-            fileElement.textContent = fileKey; // or fetch and display file data based on fileKey
-            buyerFilesContainer.appendChild(fileElement);
-        });
-    } else {
-        buyerFilesContainer.textContent = 'No files';
-    }
-
-    // Handle seller files - similar to buyer files
-    var sellerFilesContainer = document.getElementById('transactionpagesellerfiles');
-    sellerFilesContainer.innerHTML = ''; // Clear previous content
-    if (transactionData.sellerFiles && transactionData.sellerFiles.length > 0) {
-        transactionData.sellerFiles.forEach(fileKey => {
-            var fileElement = document.createElement('div');
-            fileElement.textContent = fileKey; // or fetch and display file data based on fileKey
-            sellerFilesContainer.appendChild(fileElement);
-        });
-    } else {
-        sellerFilesContainer.textContent = 'No files';
-    }
 }
 
 function displayTransactionFiles(transactionData) {
@@ -501,4 +478,41 @@ function displayTransactionFiles(transactionData) {
     });
 }
 
+function addAudioPlayers(fileUrls, containerId) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = ''; // Clear existing content
 
+    if (fileUrls.length === 0) {
+        container.textContent = 'No files here';
+    } else {
+        fileUrls.forEach(url => {
+            const playerContainer = document.createElement('div');
+            playerContainer.style.width = '100%';
+            playerContainer.style.marginBottom = '10px';
+
+            const audioPlayer = document.createElement('audio');
+            audioPlayer.controls = true;
+            audioPlayer.style.width = '100%';
+
+            const source = document.createElement('source');
+            source.src = url;
+
+            // Extract file extension and set MIME type
+            const fileExtension = url.split('.').pop();
+            source.type = `audio/${fileExtension}`;
+
+            const downloadLink = document.createElement('a');
+            downloadLink.href = url;
+            downloadLink.download = `Download File`;
+            downloadLink.textContent = 'Download File';
+            downloadLink.style.display = 'block';
+            downloadLink.style.marginTop = '5px';
+
+            audioPlayer.appendChild(source);
+            playerContainer.appendChild(audioPlayer);
+            playerContainer.appendChild(downloadLink);
+
+            container.appendChild(playerContainer);
+        });
+    }
+}
