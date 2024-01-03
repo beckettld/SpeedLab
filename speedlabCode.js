@@ -360,12 +360,17 @@ function updateTransactionTable(transactions, userId) {
             const buyerEmail = transaction.buyerUserEmail || 'N/A';
             const isCompleted = transaction.currentState === 'complete';
 
+            var redirectUrl = transaction.sellerUserId === userId 
+            ? `https://speedlab.webflow.io/transactionpageseller?id=${key}`
+            : `https://speedlab.webflow.io/transactionpagebuyer?id=${key}`;
+
+
             var row = document.createElement('tr');
             row.innerHTML = `
                 <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">${sellerEmail}</td>
                 <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">${buyerEmail}</td>
                 <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">${transaction.completed ? 'Completed' : 'In Progress'}</td>
-                <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;"><button onclick="redirectToTransactionDetails('${key}')">Details</button></td>
+                <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;"><button onclick="window.location.href='${redirectUrl}'">Details</button></td>
             `;
 
 
@@ -450,6 +455,27 @@ function displayTransactionPageData(transactionData) {
     } else {
         sellerFilesContainer.textContent = 'No files';
     }
+}
+
+function displayTransactionFiles(transactionData) {
+    ['buyerFiles', 'sellerFiles'].forEach(fileKey => {
+        let files = transactionData[fileKey];
+        let filesContainer = document.getElementById(fileKey);
+
+        filesContainer.innerHTML = ''; // Clear previous content
+
+        if (files && files.length > 0) {
+            files.forEach(fileUrl => {
+                let fileLink = document.createElement('a');
+                fileLink.href = fileUrl;
+                fileLink.textContent = 'Download File';
+                fileLink.download = '';
+                filesContainer.appendChild(fileLink);
+            });
+        } else {
+            filesContainer.textContent = 'No files';
+        }
+    });
 }
 
 
