@@ -401,30 +401,50 @@ function redirectToTransactionDetails(transactionId) {
 }
 
 //Transaction page logic
-// slug = /transactionpage
+// slug = /transactionpagebuyer
 document.addEventListener("DOMContentLoaded", function() {
-    if (window.location.pathname === '/transactionpage') {
+    if (window.location.pathname === '/transactionpagebuyer') {
         var transactionId = getTransactionIdFromUrl();
 
         if (transactionId) {
-            console.log("Displaying Transaction ID:", transactionId);
+            console.log("Displaying Buyer Transaction ID:", transactionId);
             fetchUniqueTransactionData(transactionId).then(transactionData => {
                 if (transactionData) {
-                    // Placeholder for your future function
                     displayTransactionPageData(transactionData);
-
-                    // Additional logic for the transaction page can be added here
                 } else {
-                    console.log("Transaction data not found for ID:", transactionId);
+                    console.log("Buyer Transaction data not found for ID:", transactionId);
                 }
             }).catch(error => {
-                console.error("Error fetching transaction data:", error);
+                console.error("Error fetching Buyer Transaction data:", error);
             });
         } else {
-            console.log("No transaction ID found in URL");
+            console.log("No Buyer Transaction ID found in URL");
         }
     }
 });
+
+// slug = /transactionpageseller
+document.addEventListener("DOMContentLoaded", function() {
+    if (window.location.pathname === '/transactionpageseller') {
+        var transactionId = getTransactionIdFromUrl();
+
+        if (transactionId) {
+            console.log("Displaying Seller Transaction ID:", transactionId);
+            fetchUniqueTransactionData(transactionId).then(transactionData => {
+                if (transactionData) {
+                    displayTransactionPageData(transactionData);
+                } else {
+                    console.log("Seller Transaction data not found for ID:", transactionId);
+                }
+            }).catch(error => {
+                console.error("Error fetching Seller Transaction data:", error);
+            });
+        } else {
+            console.log("No Seller Transaction ID found in URL");
+        }
+    }
+});
+
 
 function displayTransactionPageData(transactionData) {
     // Access each element by ID and update its content 
