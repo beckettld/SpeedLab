@@ -1,4 +1,5 @@
 //verify that you can load a file
+/*
 function logCurrentUser() {
     firebase.auth().onAuthStateChanged(function(user) {
         if (user) {
@@ -36,3 +37,4 @@ logCurrentUser
 
 const testId = "-Nn6w1P77VCQ_51Bz60Z"
 fetchUniqueTransactionData(testId)
+*/

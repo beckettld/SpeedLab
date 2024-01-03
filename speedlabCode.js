@@ -434,7 +434,7 @@ document.addEventListener("DOMContentLoaded", function() {
             fetchUniqueTransactionData(transactionId).then(transactionData => {
                 if (transactionData) {
                     displayTransactionPageData(transactionData);
-                    addAudioPlayers(transactionData.buyerFiles, 'buyerAudioFilesContainer');
+                    transactionData.buyerFiles.forEach(fileKey => fetchFileUrlAndPlay(fileKey, 'buyerAudioFilesContainer'));
                 } else {
                     console.log("Seller Transaction data not found for ID:", transactionId);
                 }
@@ -447,7 +447,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
-
 function displayTransactionPageData(transactionData) {
     // Update transaction information
     document.getElementById('transactionpageselleremail').textContent = 'Seller: ' + (transactionData.sellerUserEmail || 'N/A');
@@ -457,36 +456,32 @@ function displayTransactionPageData(transactionData) {
     document.getElementById('transactionpagemessage').textContent = 'Message: ' + (transactionData.message || 'N/A');
 }
 
-function displayTransactionFiles(transactionData) {
-    ['buyerFiles', 'sellerFiles'].forEach(fileKey => {
-        let files = transactionData[fileKey];
-        let filesContainer = document.getElementById(fileKey);
-
-        filesContainer.innerHTML = ''; // Clear previous content
-
-        if (files && files.length > 0) {
-            files.forEach(fileUrl => {
-                let fileLink = document.createElement('a');
-                fileLink.href = fileUrl;
-                fileLink.textContent = 'Download File';
-                fileLink.download = '';
-                filesContainer.appendChild(fileLink);
-            });
+function fetchFileUrlAndPlay(fileKey, containerId) {
+    const fileRef = firebase.database().ref('/files/' + fileKey);
+    fileRef.once('value', snapshot => {
+        if (snapshot.exists()) {
+            const fileData = snapshot.val();
+            if (fileData && fileData.fileUrl) {
+                addAudioPlayers([fileData.fileUrl], containerId);
+            } else {
+                console.error('File URL not found for key:', fileKey);
+            }
         } else {
-            filesContainer.textContent = 'No files';
+            console.error('File not found for key:', fileKey);
         }
+    }).catch(error => {
+        console.error('Error fetching file data:', error);
     });
 }
 
 function addAudioPlayers(fileUrls, containerId) {
-    console.log(fileUrls)
-    console.log(containerId)
     const container = document.getElementById(containerId);
-    container.innerHTML = ''; // Clear existing content
+    container.innerHTML = '';
 
-    if (fileUrls && fileUrls.length > 0) {
-        fileUrls.forEach(fileUrl => {
-            console.log(fileUrl)
+    if (fileUrls.length === 0) {
+        container.textContent = 'No files here';
+    } else {
+        fileUrls.forEach(url => {
             const playerContainer = document.createElement('div');
             playerContainer.style.width = '100%';
             playerContainer.style.marginBottom = '10px';
@@ -496,14 +491,14 @@ function addAudioPlayers(fileUrls, containerId) {
             audioPlayer.style.width = '100%';
 
             const source = document.createElement('source');
-            source.src = fileUrl;
-            source.type = 'audio/' + fileUrl.split('.').pop(); // Dynamically set the MIME type
+            source.src = url;
+            source.type = 'audio/' + url.split('.').pop(); 
 
             audioPlayer.appendChild(source);
             playerContainer.appendChild(audioPlayer);
 
             const downloadLink = document.createElement('a');
-            downloadLink.href = fileUrl;
+            downloadLink.href = url;
             downloadLink.download = true;
             downloadLink.textContent = 'Download';
             downloadLink.style.display = 'block';
@@ -512,10 +507,5 @@ function addAudioPlayers(fileUrls, containerId) {
             playerContainer.appendChild(downloadLink);
             container.appendChild(playerContainer);
         });
-    } else {
-        const noFilesMessage = document.createElement('p');
-        noFilesMessage.textContent = 'No files available for playback.';
-        container.appendChild(noFilesMessage);
     }
 }
-
