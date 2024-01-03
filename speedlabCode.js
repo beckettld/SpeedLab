@@ -482,10 +482,8 @@ function addAudioPlayers(fileUrls, containerId) {
     const container = document.getElementById(containerId);
     container.innerHTML = ''; // Clear existing content
 
-    if (fileUrls.length === 0) {
-        container.textContent = 'No files here';
-    } else {
-        fileUrls.forEach(url => {
+    if (fileUrls && fileUrls.length > 0) {
+        fileUrls.forEach(fileUrl => {
             const playerContainer = document.createElement('div');
             playerContainer.style.width = '100%';
             playerContainer.style.marginBottom = '10px';
@@ -495,24 +493,26 @@ function addAudioPlayers(fileUrls, containerId) {
             audioPlayer.style.width = '100%';
 
             const source = document.createElement('source');
-            source.src = url;
-
-            // Extract file extension and set MIME type
-            const fileExtension = url.split('.').pop();
-            source.type = `audio/${fileExtension}`;
-
-            const downloadLink = document.createElement('a');
-            downloadLink.href = url;
-            downloadLink.download = `Download File`;
-            downloadLink.textContent = 'Download File';
-            downloadLink.style.display = 'block';
-            downloadLink.style.marginTop = '5px';
+            source.src = fileUrl;
+            source.type = 'audio/' + fileUrl.split('.').pop(); // Dynamically set the MIME type
 
             audioPlayer.appendChild(source);
             playerContainer.appendChild(audioPlayer);
-            playerContainer.appendChild(downloadLink);
 
+            const downloadLink = document.createElement('a');
+            downloadLink.href = fileUrl;
+            downloadLink.download = true;
+            downloadLink.textContent = 'Download';
+            downloadLink.style.display = 'block';
+            downloadLink.style.marginTop = '5px';
+
+            playerContainer.appendChild(downloadLink);
             container.appendChild(playerContainer);
         });
+    } else {
+        const noFilesMessage = document.createElement('p');
+        noFilesMessage.textContent = 'No files available for playback.';
+        container.appendChild(noFilesMessage);
     }
 }
+
