@@ -509,31 +509,23 @@ function addAudioPlayers(fileUrls, containerId) {
 
     if (fileUrls && fileUrls.length > 0) {
         fileUrls.forEach(fileUrl => {
-            const playerContainer = document.createElement('div');
-            playerContainer.style.width = '100%';
-            playerContainer.style.marginBottom = '10px';
-
             const audioPlayer = document.createElement('video');
             audioPlayer.controls = true;
-            audioPlayer.style.width = '100%';
-            audioPlayer.style.height = '30px'; // Reduce the height to minimize the margin
 
             const source = document.createElement('source');
             source.src = fileUrl;
             source.type = 'audio/' + fileUrl.split('.').pop(); // Dynamically set the MIME type
 
             audioPlayer.appendChild(source);
-            playerContainer.appendChild(audioPlayer);
+            container.appendChild(audioPlayer);
 
             const downloadLink = document.createElement('a');
             downloadLink.href = fileUrl;
             downloadLink.download = true;
             downloadLink.textContent = 'Download';
             downloadLink.style.display = 'block';
-            downloadLink.style.marginTop = '5px';
 
-            playerContainer.appendChild(downloadLink);
-            container.appendChild(playerContainer);
+            container.appendChild(downloadLink);
         });
     } else {
         const noFilesMessage = document.createElement('p');
@@ -541,4 +533,5 @@ function addAudioPlayers(fileUrls, containerId) {
         container.appendChild(noFilesMessage);
     }
 }
+
 
