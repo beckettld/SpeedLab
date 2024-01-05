@@ -538,6 +538,7 @@ function addAudioPlayers(fileUrls, containerId) {
 
             const downloadLink = document.createElement('a');
             downloadLink.href = url;
+            downloadLink.target = "_blank"; // Opens in a new tab
             downloadLink.download = true;
             downloadLink.textContent = 'Download';
             downloadLink.style.display = 'block';
@@ -552,3 +553,4 @@ function addAudioPlayers(fileUrls, containerId) {
         container.appendChild(noFilesMessage);
     }
 }
+
