@@ -429,6 +429,7 @@ document.addEventListener("DOMContentLoaded", function() {
         var transactionId = getTransactionIdFromUrl();
 
         if (transactionId) {
+            checkUserStatus();
             console.log("Displaying Seller Transaction ID:", transactionId);
             fetchUniqueTransactionData(transactionId).then(transactionData => {
                 if (transactionData) {
@@ -466,6 +467,14 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
+function checkUserStatus() {
+    var user = firebase.auth().currentUser;
+    if (user) {
+        console.log("User is logged in. UID:", user.uid);
+    } else {
+        console.log("User is not logged in.");
+    }
+}
 
 function updateSellerFilesInTransaction(transactionId, fileKeys) {
     return new Promise((resolve, reject) => {
