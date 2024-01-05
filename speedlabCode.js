@@ -452,6 +452,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         uploadFiles(fileInput.files, transactionId).then(fileKeys => {
                             updateSellerFilesInTransaction(transactionId, fileKeys).then(() => {
                                 console.log('Seller files uploaded and updated in transaction.');
+                                // Additional code to handle successful form submission, e.g., showing a success message or redirecting
                             }).catch(error => {
                                 console.error('Error updating seller files in transaction:', error);
                             });
@@ -466,6 +467,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 });
+
 
 function checkUserStatus() {
     var user = firebase.auth().currentUser;
