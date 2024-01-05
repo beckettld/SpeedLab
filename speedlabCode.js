@@ -442,7 +442,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 console.error("Error fetching Seller Transaction data:", error);
             });
 
-            var completeTransactionForm = document.getElementById('completetransactionform');
+            var completeTransactionForm = document.getElementById('transactionpagesellerform');
             if (completeTransactionForm) {
                 completeTransactionForm.addEventListener('submit', function(event) {
                     event.preventDefault(); // Prevent the default form submission
