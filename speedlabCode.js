@@ -509,10 +509,12 @@ function addAudioPlayers(fileUrls, containerId) {
 
     if (fileUrls && fileUrls.length > 0) {
         fileUrls.forEach(url => {
+            console.log("url" + url)
+            console.log("user" + user.uid)
             const playerContainer = document.createElement('div');
             playerContainer.style.width = '100%';
             playerContainer.style.marginBottom = '10px';
-
+            
             const videoPlayer = document.createElement('video');
             videoPlayer.controls = true;
             videoPlayer.autoplay = false; // Set to false for user control
