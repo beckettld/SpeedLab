@@ -518,8 +518,7 @@ function addAudioPlayers(fileUrls, containerId) {
 
     if (fileUrls && fileUrls.length > 0) {
         fileUrls.forEach(url => {
-            console.log("url" + url)
-            console.log("user" + user.uid)
+            console.log("url: " + url)
             const playerContainer = document.createElement('div');
             playerContainer.style.width = '100%';
             playerContainer.style.marginBottom = '10px';
