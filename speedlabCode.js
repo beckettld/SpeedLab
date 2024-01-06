@@ -447,7 +447,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 completeTransactionForm.addEventListener('submit', function(event) {
                     event.preventDefault(); // Prevent the default form submission
 
-                    var fileInput = document.getElementById('transactionPageSellerFileSubmit');
+                    var fileInput = document.getElementById('transactionpagesellerfilesubmit');
                     if (fileInput && fileInput.files.length > 0) {
                         uploadFiles(fileInput.files, transactionId).then(fileKeys => {
                             updateSellerFilesInTransaction(transactionId, fileKeys).then(() => {
