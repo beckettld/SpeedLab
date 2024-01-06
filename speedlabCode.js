@@ -427,7 +427,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
 // slug = /transactionpageseller
 document.addEventListener("DOMContentLoaded", function() {
+    console.log(window.location.pathname + " enter")
     if (window.location.pathname === '/transactionpageseller') {
+        console.log(window.location.pathname + " enter")
         var transactionId = getTransactionIdFromUrl();
         console.log(transactionId)
         if (transactionId) {
@@ -446,6 +448,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
             var completeTransactionForm = document.getElementById('transactionpagesellerform');
             if (completeTransactionForm) {
+                console.log("into the completeTransactionForm if statement")
+
+                /*
                 completeTransactionForm.addEventListener('submit', function(event) {
                     event.preventDefault(); // Prevent the default form submission
 
@@ -468,12 +473,31 @@ document.addEventListener("DOMContentLoaded", function() {
                         });
                     }
                 });
+                */
             }
         } else {
             console.log("No Seller Transaction ID found in URL");
         }
     }
 });
+
+function handleForm1(fileInput, transactionId) {
+    uploadFiles(fileInput.files, transactionId).then(fileKeys => {
+        updateSellerFilesInTransaction(transactionId, fileKeys).then(() => {
+            console.log('Seller files uploaded and updated in transaction.');
+            updateTransactionStateToComplete(transactionId).then(() => {
+                console.log('Transaction state updated to complete.');
+                // Additional code to handle successful form submission, e.g., showing a success message or redirecting
+            }).catch(error => {
+                console.error('Error updating transaction state:', error);
+            });
+        }).catch(error => {
+            console.error('Error updating seller files in transaction:', error);
+        });
+    }).catch(error => {
+        console.error('Error uploading files:', error);
+    });
+}
 
 
 function checkUserStatus() {
