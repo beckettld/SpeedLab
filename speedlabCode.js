@@ -485,6 +485,7 @@ function checkUserStatus() {
 
 function updateSellerFilesInTransaction(transactionId, fileKeys) {
     return new Promise((resolve, reject) => {
+        debugger;
         var transactionRef = firebase.database().ref('/uniqueTransactions/' + transactionId);
         transactionRef.update({ sellerFiles: fileKeys })
             .then(resolve)
