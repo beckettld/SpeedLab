@@ -452,7 +452,12 @@ document.addEventListener("DOMContentLoaded", function() {
                         uploadFiles(fileInput.files, transactionId).then(fileKeys => {
                             updateSellerFilesInTransaction(transactionId, fileKeys).then(() => {
                                 console.log('Seller files uploaded and updated in transaction.');
-                                // Additional code to handle successful form submission, e.g., showing a success message or redirecting
+                                updateTransactionStateToComplete(transactionId).then(() => {
+                                    console.log('Transaction state updated to complete.');
+                                    // Additional code to handle successful form submission, e.g., showing a success message or redirecting
+                                }).catch(error => {
+                                    console.error('Error updating transaction state:', error);
+                                });
                             }).catch(error => {
                                 console.error('Error updating seller files in transaction:', error);
                             });
@@ -482,6 +487,15 @@ function updateSellerFilesInTransaction(transactionId, fileKeys) {
     return new Promise((resolve, reject) => {
         var transactionRef = firebase.database().ref('/uniqueTransactions/' + transactionId);
         transactionRef.update({ sellerFiles: fileKeys })
+            .then(resolve)
+            .catch(reject);
+    });
+}
+
+function updateTransactionStateToComplete(transactionId) {
+    return new Promise((resolve, reject) => {
+        var transactionRef = firebase.database().ref('/uniqueTransactions/' + transactionId);
+        transactionRef.update({ currentState: 'complete' })
             .then(resolve)
             .catch(reject);
     });
