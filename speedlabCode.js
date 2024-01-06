@@ -423,11 +423,13 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
+
+
 // slug = /transactionpageseller
 document.addEventListener("DOMContentLoaded", function() {
     if (window.location.pathname === '/transactionpageseller') {
         var transactionId = getTransactionIdFromUrl();
-
+        console.log(transactionId)
         if (transactionId) {
             checkUserStatus();
             console.log("Displaying Seller Transaction ID:", transactionId);
