@@ -451,7 +451,7 @@ document.addEventListener("DOMContentLoaded", function() {
         var completeTransactionFormButton = document.getElementById('transactionpagesellerbutton');
         if (completeTransactionFormButton) {
             console.log("into the completeTransactionForm Button if statement");
-            completeTransactionFormButton.addEventListener('onclick', function(event) {
+            completeTransactionFormButton.addEventListener('onClick', function(event) {
                 event.preventDefault(); // Prevent the default form submission
                 boomer(event);
             });
