@@ -448,10 +448,10 @@ document.addEventListener("DOMContentLoaded", function() {
                         console.error("Error fetching Seller Transaction data:", error);
                     });
                 }
-        var completeTransactionForm = document.getElementById('transactionpagesellerform');
-        if (completeTransactionForm) {
-            console.log("into the completeTransactionForm if statement");
-            completeTransactionForm.addEventListener('submit', function(event) {
+        var completeTransactionFormButton = document.getElementById('transactionpagesellercompletetransactionbutton');
+        if (completeTransactionFormButton) {
+            console.log("into the completeTransactionForm Button if statement");
+            completeTransactionFormButton.addEventListener('onclick', function(event) {
                 event.preventDefault(); // Prevent the default form submission
 
                 var transactionId = getTransactionIdFromUrl();
