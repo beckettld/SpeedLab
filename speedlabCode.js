@@ -452,10 +452,11 @@ document.addEventListener("DOMContentLoaded", function() {
         if (completeTransactionFormButton) {
             console.log("into the completeTransactionForm Button if statement");
             completeTransactionFormButton.addEventListener('onclick', function(event) {
+                console.log('button clicked,')
                 event.preventDefault(); // Prevent the default form submission
 
                 var transactionId = getTransactionIdFromUrl();
-                console.log(transactionId);
+                console.log("transactionId after button:" + transactionId);
                 if (transactionId) {
                     checkUserStatus();
                     console.log("Displaying Seller Transaction ID:", transactionId);
