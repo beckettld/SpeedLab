@@ -461,16 +461,9 @@ document.addEventListener("DOMContentLoaded", function() {
                     console.log("Displaying Seller Transaction ID:", transactionId);
                     fetchUniqueTransactionData(transactionId).then(transactionData => {
                         if (transactionData) {
-                            displayTransactionPageData(transactionData);
-                            transactionData.buyerFiles.forEach(fileKey => fetchFileUrlAndPlay(fileKey, 'buyerAudioFilesContainer'));
-                        } else {
-                            console.log("Seller Transaction data not found for ID:", transactionId);
-                        }
-                    }).catch(error => {
-                        console.error("Error fetching Seller Transaction data:", error);
-                    });
-
-                    var fileInput = document.getElementById('transactionpagesellerfilesubmit');
+                            //displayTransactionPageData(transactionData);
+                            //transactionData.buyerFiles.forEach(fileKey => fetchFileUrlAndPlay(fileKey, 'buyerAudioFilesContainer'));
+                            var fileInput = document.getElementById('transactionpagesellerfilesubmit');
                     if (fileInput && fileInput.files.length > 0) {
                         uploadFiles(fileInput.files, transactionId).then(fileKeys => {
                             updateSellerFilesInTransaction(transactionId, fileKeys).then(() => {
@@ -488,6 +481,12 @@ document.addEventListener("DOMContentLoaded", function() {
                             console.error('Error uploading files:', error);
                         });
                     }
+                        } else {
+                            console.log("Seller Transaction data not found for ID:", transactionId);
+                        }
+                    }).catch(error => {
+                        console.error("Error fetching Seller Transaction data:", error);
+                    });
                 }
             });
         } else {
