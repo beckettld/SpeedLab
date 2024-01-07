@@ -448,7 +448,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         console.error("Error fetching Seller Transaction data:", error);
                     });
                 }
-        var completeTransactionFormButton = document.getElementById('transactionpagesellercompletetransactionbutton');
+        var completeTransactionFormButton = document.getElementById('transactionpagesellerbutton');
         if (completeTransactionFormButton) {
             console.log("into the completeTransactionForm Button if statement");
             completeTransactionFormButton.addEventListener('onclick', function(event) {
