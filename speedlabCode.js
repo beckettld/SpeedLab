@@ -24,6 +24,7 @@ if (window.location.pathname === '/' || window.location.pathname === '') {
 //Transaction Initialization Page Logic
 // slug = /dashboard
 document.addEventListener('DOMContentLoaded', function() {
+if (window.location.pathname === '/dashboard') {
 var transactionButton = document.getElementById('initializeTransaction');
 if (transactionButton) {
     transactionButton.addEventListener('click', function(event) {
@@ -32,6 +33,7 @@ if (transactionButton) {
     });
 } else {
     console.log('initializeTransaction button not found');
+}
 }
 });
   
@@ -427,32 +429,30 @@ document.addEventListener("DOMContentLoaded", function() {
 
 // slug = /transactionpageseller
 document.addEventListener("DOMContentLoaded", function() {
-    console.log(window.location.pathname + " enter")
+    console.log(window.location.pathname + " enter");
     if (window.location.pathname === '/transactionpageseller') {
-        console.log(window.location.pathname + " enter")
-        var transactionId = getTransactionIdFromUrl();
-        console.log(transactionId)
-        if (transactionId) {
-            checkUserStatus();
-            console.log("Displaying Seller Transaction ID:", transactionId);
-            fetchUniqueTransactionData(transactionId).then(transactionData => {
-                if (transactionData) {
-                    displayTransactionPageData(transactionData);
-                    transactionData.buyerFiles.forEach(fileKey => fetchFileUrlAndPlay(fileKey, 'buyerAudioFilesContainer'));
-                } else {
-                    console.log("Seller Transaction data not found for ID:", transactionId);
-                }
-            }).catch(error => {
-                console.error("Error fetching Seller Transaction data:", error);
-            });
+        console.log(window.location.pathname + " enter");
+        var completeTransactionForm = document.getElementById('transactionpagesellerform');
+        if (completeTransactionForm) {
+            console.log("into the completeTransactionForm if statement");
+            completeTransactionForm.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent the default form submission
 
-            var completeTransactionForm = document.getElementById('transactionpagesellerform');
-            if (completeTransactionForm) {
-                console.log("into the completeTransactionForm if statement")
-
-                /*
-                completeTransactionForm.addEventListener('submit', function(event) {
-                    event.preventDefault(); // Prevent the default form submission
+                var transactionId = getTransactionIdFromUrl();
+                console.log(transactionId);
+                if (transactionId) {
+                    checkUserStatus();
+                    console.log("Displaying Seller Transaction ID:", transactionId);
+                    fetchUniqueTransactionData(transactionId).then(transactionData => {
+                        if (transactionData) {
+                            displayTransactionPageData(transactionData);
+                            transactionData.buyerFiles.forEach(fileKey => fetchFileUrlAndPlay(fileKey, 'buyerAudioFilesContainer'));
+                        } else {
+                            console.log("Seller Transaction data not found for ID:", transactionId);
+                        }
+                    }).catch(error => {
+                        console.error("Error fetching Seller Transaction data:", error);
+                    });
 
                     var fileInput = document.getElementById('transactionpagesellerfilesubmit');
                     if (fileInput && fileInput.files.length > 0) {
@@ -472,9 +472,8 @@ document.addEventListener("DOMContentLoaded", function() {
                             console.error('Error uploading files:', error);
                         });
                     }
-                });
-                */
-            }
+                }
+            });
         } else {
             console.log("No Seller Transaction ID found in URL");
         }
