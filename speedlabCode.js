@@ -452,49 +452,54 @@ document.addEventListener("DOMContentLoaded", function() {
         if (completeTransactionFormButton) {
             console.log("into the completeTransactionForm Button if statement");
             completeTransactionFormButton.addEventListener('onclick', function(event) {
-                console.log('button clicked,')
                 event.preventDefault(); // Prevent the default form submission
-
-                var transactionId = getTransactionIdFromUrl();
-                console.log("transactionId after button:" + transactionId);
-                if (transactionId) {
-                    checkUserStatus();
-                    console.log("Displaying Seller Transaction ID:", transactionId);
-                    fetchUniqueTransactionData(transactionId).then(transactionData => {
-                        if (transactionData) {
-                            //displayTransactionPageData(transactionData);
-                            //transactionData.buyerFiles.forEach(fileKey => fetchFileUrlAndPlay(fileKey, 'buyerAudioFilesContainer'));
-                            var fileInput = document.getElementById('transactionpagesellerfilesubmit');
-                    if (fileInput && fileInput.files.length > 0) {
-                        uploadFiles(fileInput.files, transactionId).then(fileKeys => {
-                            updateSellerFilesInTransaction(transactionId, fileKeys).then(() => {
-                                console.log('Seller files uploaded and updated in transaction.');
-                                updateTransactionStateToComplete(transactionId).then(() => {
-                                    console.log('Transaction state updated to complete.');
-                                    // Additional code to handle successful form submission, e.g., showing a success message or redirecting
-                                }).catch(error => {
-                                    console.error('Error updating transaction state:', error);
-                                });
-                            }).catch(error => {
-                                console.error('Error updating seller files in transaction:', error);
-                            });
-                        }).catch(error => {
-                            console.error('Error uploading files:', error);
-                        });
-                    }
-                        } else {
-                            console.log("Seller Transaction data not found for ID:", transactionId);
-                        }
-                    }).catch(error => {
-                        console.error("Error fetching Seller Transaction data:", error);
-                    });
-                }
+                boomer(event);
             });
         } else {
             console.log("No Seller Transaction ID found in URL");
         }
     }
 });
+
+function boomer() {
+    console.log('button clicked, go boomer')
+
+    var transactionId = getTransactionIdFromUrl();
+    console.log("transactionId after button:" + transactionId);
+    if (transactionId) {
+        checkUserStatus();
+        console.log("Displaying Seller Transaction ID:", transactionId);
+        fetchUniqueTransactionData(transactionId).then(transactionData => {
+            if (transactionData) {
+                //displayTransactionPageData(transactionData);
+                //transactionData.buyerFiles.forEach(fileKey => fetchFileUrlAndPlay(fileKey, 'buyerAudioFilesContainer'));
+                var fileInput = document.getElementById('transactionpagesellerfilesubmit');
+        if (fileInput && fileInput.files.length > 0) {
+            uploadFiles(fileInput.files, transactionId).then(fileKeys => {
+                updateSellerFilesInTransaction(transactionId, fileKeys).then(() => {
+                    console.log('Seller files uploaded and updated in transaction.');
+                    updateTransactionStateToComplete(transactionId).then(() => {
+                        console.log('Transaction state updated to complete.');
+                        // Additional code to handle successful form submission, e.g., showing a success message or redirecting
+                    }).catch(error => {
+                        console.error('Error updating transaction state:', error);
+                    });
+                }).catch(error => {
+                    console.error('Error updating seller files in transaction:', error);
+                });
+            }).catch(error => {
+                console.error('Error uploading files:', error);
+            });
+        }
+            } else {
+                console.log("Seller Transaction data not found for ID:", transactionId);
+            }
+        }).catch(error => {
+            console.error("Error fetching Seller Transaction data:", error);
+        });
+    }
+
+}
 
 function handleForm1(fileInput, transactionId) {
     uploadFiles(fileInput.files, transactionId).then(fileKeys => {
