@@ -432,6 +432,22 @@ document.addEventListener("DOMContentLoaded", function() {
     console.log(window.location.pathname + " enter");
     if (window.location.pathname === '/transactionpageseller') {
         console.log(window.location.pathname + " enter");
+        var transactionId = getTransactionIdFromUrl();
+                console.log(transactionId);
+                if (transactionId) {
+                    checkUserStatus();
+                    console.log("Displaying Seller Transaction ID:", transactionId);
+                    fetchUniqueTransactionData(transactionId).then(transactionData => {
+                        if (transactionData) {
+                            displayTransactionPageData(transactionData);
+                            transactionData.buyerFiles.forEach(fileKey => fetchFileUrlAndPlay(fileKey, 'buyerAudioFilesContainer'));
+                        } else {
+                            console.log("Seller Transaction data not found for ID:", transactionId);
+                        }
+                    }).catch(error => {
+                        console.error("Error fetching Seller Transaction data:", error);
+                    });
+                }
         var completeTransactionForm = document.getElementById('transactionpagesellerform');
         if (completeTransactionForm) {
             console.log("into the completeTransactionForm if statement");
