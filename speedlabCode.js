@@ -40,6 +40,17 @@ if (transactionButton) {
 //Create new transaction template, add it to database.
 // slug = /createnewtransaction
 document.addEventListener("DOMContentLoaded", function() {
+
+    function showPopup(message) {
+        var messageElement = document.getElementById("popupMessage");
+        if (messageElement) {
+            messageElement.textContent = message;
+        } else {
+            console.error("Popup message element not found");
+        }
+        document.getElementById("myPopup").style.display = "block";
+    }
+
     if (window.location.pathname === '/createnewtransaction') {
         var createTransactionButton = document.getElementById("createnewtransactionbutton");
         if (createTransactionButton) {
@@ -83,15 +94,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
-function showPopup(message) {
-    var messageElement = document.getElementById("popupMessage");
-    if (messageElement) {
-        messageElement.textContent = message;
-    } else {
-        console.error("Popup message element not found");
-    }
-    document.getElementById("myPopup").style.display = "block";
-}
+
 
 
 
