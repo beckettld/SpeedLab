@@ -318,8 +318,8 @@ document.addEventListener("DOMContentLoaded", function() {
                         payButton.addEventListener('click', function() {
                             updateTransactionStateToPaid(transactionId).then(() => {
                                 const redirectUrl = WEBSITEURL + `/transactionpage?id=${transactionId}`;
-                                console.log("Redirecting to:", redirectUrl);
-                                window.location.href = redirectUrl;
+                                console.log("Redirecting to:", uniqueURL);
+                                window.location.href = uniqueURL;
                             }).catch(error => {
                                 console.error("Error updating transaction state:", error);
                             });
