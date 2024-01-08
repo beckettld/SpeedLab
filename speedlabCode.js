@@ -104,10 +104,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
-
-
-
-
 //Handle Transaction Confirmation page with link. specifically the display of data
 // slug = /finishsetuptransaction
 document.addEventListener("DOMContentLoaded", function() {
@@ -122,18 +118,38 @@ document.addEventListener("DOMContentLoaded", function() {
             console.log("No transaction ID found in URL");
         }
 
-        var confirmForm = document.getElementById('confirmtransactionform');
-        confirmForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent the default form submission
-            createUniqueTransaction().then(uniqueTransactionId => {
-                console.log("Unique transaction created");
-                window.location.href = '/reviewtransaction?id=' + uniqueTransactionId;
-            }).catch(error => {
-                console.error("Failed to create unique transaction:", error);
+        var finishSetupButton = document.getElementById('finishsetuptransactionbutton');
+        if (finishSetupButton) {
+            finishSetupButton.addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent the default button action
+                showLoadingIndicator();
+
+                createUniqueTransaction().then(uniqueTransactionId => {
+                    console.log("Unique transaction created");
+                    window.location.href = '/reviewtransaction?id=' + uniqueTransactionId;
+                }).catch(error => {
+                    console.error("Failed to create unique transaction:", error);
+                    hideLoadingIndicator();
+                });
             });
-        });
+        }
     }
 });
+
+function showLoadingIndicator() {
+    var indicator = document.getElementById('loadingIndicator');
+    if (indicator) {
+        indicator.style.display = 'block'; // Show the loading indicator
+    }
+}
+
+function hideLoadingIndicator() {
+    var indicator = document.getElementById('loadingIndicator');
+    if (indicator) {
+        indicator.style.display = 'none'; // Hide the loading indicator
+    }
+}
+
 
 function getTransactionIdFromUrl() {
     var urlParams = new URLSearchParams(window.location.search);
