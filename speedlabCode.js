@@ -611,6 +611,7 @@ function addAudioPlayers(fileUrls, containerId) {
             const playerContainer = document.createElement('div');
             playerContainer.style.width = '100%';
             playerContainer.style.marginBottom = '10px';
+            playerContainer.style.marginTop = '-75px';
             
             const videoPlayer = document.createElement('video');
             videoPlayer.controls = true;
