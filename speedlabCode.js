@@ -150,7 +150,6 @@ function hideLoadingIndicator() {
     }
 }
 
-
 function getTransactionIdFromUrl() {
     var urlParams = new URLSearchParams(window.location.search);
     return urlParams.get('id');
@@ -312,6 +311,7 @@ document.addEventListener("DOMContentLoaded", function() {
             fetchUniqueTransactionData(transactionId).then(transactionData => {
                 if (transactionData) {
                     displayUniqueTransactionData(transactionData);
+                    transactionData.buyerFiles.forEach(fileKey => fetchFileUrlAndPlay(fileKey, 'ReviewFilesContainer'));
 
                     // Add event listener to the payment button
                     var payButton = document.getElementById('payfortransaction');
@@ -543,25 +543,6 @@ function boomer() {
     }
 
 }
-
-function handleForm1(fileInput, transactionId) {
-    uploadFiles(fileInput.files, transactionId).then(fileKeys => {
-        updateSellerFilesInTransaction(transactionId, fileKeys).then(() => {
-            console.log('Seller files uploaded and updated in transaction.');
-            updateTransactionStateToComplete(transactionId).then(() => {
-                console.log('Transaction state updated to complete.');
-                // Additional code to handle successful form submission, e.g., showing a success message or redirecting
-            }).catch(error => {
-                console.error('Error updating transaction state:', error);
-            });
-        }).catch(error => {
-            console.error('Error updating seller files in transaction:', error);
-        });
-    }).catch(error => {
-        console.error('Error uploading files:', error);
-    });
-}
-
 
 function checkUserStatus() {
     var user = firebase.auth().currentUser;
