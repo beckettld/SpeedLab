@@ -69,8 +69,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         var customLink = WEBSITEURL+'/finishsetuptransaction?id='+transactionKey;
                         console.log("Transaction link: ", customLink);
 
-                        var linkMessageElement = document.getElementById('transactionlinkmessage');
-                        linkMessageElement.textContent = 'Success! Your link is: ' + customLink;
+                        showPopup("Success! Your link is: " + customLink);
                     })
                     .catch(function(error) {
                         console.log("Error saving transaction data: ", error);
@@ -83,6 +82,16 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 });
+
+function showPopup(message) {
+    // Set the message inside the popup
+    var messageElement = document.getElementById("popupMessage");
+    messageElement.textContent = message;
+
+    // Display the popup
+    document.getElementById("myPopup").style.display = "block";
+}
+
 
 
 //Handle Transaction Confirmation page with link. specifically the display of data
