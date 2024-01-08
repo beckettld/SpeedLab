@@ -55,6 +55,11 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById("myPopup").style.display = "none";
     }
 
+    var closeButton = document.querySelector('.close-btn');
+    if (closeButton) {
+        closeButton.addEventListener('click', closePopup);
+    }
+
 
     if (window.location.pathname === '/createnewtransaction') {
         var createTransactionButton = document.getElementById("createnewtransactionbutton");
