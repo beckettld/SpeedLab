@@ -454,7 +454,8 @@ document.addEventListener("DOMContentLoaded", function() {
             fetchUniqueTransactionData(transactionId).then(transactionData => {
                 if (transactionData) {
                     displayTransactionPageData(transactionData);
-                    transactionData.buyerFiles.forEach(fileKey => fetchFileUrlAndPlay(fileKey, 'buyerAudioFilesContainer'));
+                    transactionData.buyerFiles.forEach(fileKey => fetchFileUrlAndPlay(fileKey, 'transactionpagebuyerfiles'));
+                    transactionData.buyerFiles.forEach(fileKey => fetchFileUrlAndPlay(fileKey, 'transactionpagesellerfiles'));
                 } else {
                     console.log("Buyer Transaction data not found for ID:", transactionId);
                 }
