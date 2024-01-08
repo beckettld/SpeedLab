@@ -309,7 +309,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (transactionData) {
                     displayUniqueTransactionData(transactionData);
                     transactionData.buyerFiles.forEach(fileKey => fetchFileUrlAndPlay(fileKey, 'ReviewFilesContainer'));
-
+                    console.log(transactionId)
+                    const uniqueURL = WEBSITEURL + `/transactionpage?id=${transactionId}`;
+                    console.log(uniqueURL)
                     // Add event listener to the payment button
                     var payButton = document.getElementById('payfortransaction');
                     if (payButton) {
