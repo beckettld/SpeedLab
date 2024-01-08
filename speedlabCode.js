@@ -41,45 +41,49 @@ if (transactionButton) {
 // slug = /createnewtransaction
 document.addEventListener("DOMContentLoaded", function() {
     if (window.location.pathname === '/createnewtransaction') {
-      var form = document.getElementById("newtransaction");
-      form.addEventListener("submit", function(event) {
-          // Getting the values from the form
-          var transactionDescription = document.getElementById("transactiondescription").value;
-          var amount = document.getElementById("amount").value;
-          var user = firebase.auth().currentUser;
+        var createTransactionButton = document.getElementById("createnewtransactionbutton");
+        if (createTransactionButton) {
+            createTransactionButton.addEventListener("click", function(event) {
+                event.preventDefault(); // Prevent the default button action
 
-          // Creating an object to hold the form data
-          
-        if (user && user.email) {
-            var formData = {
-                description: transactionDescription,
-                amount: amount,
-                sellerId: user.uid, // Add the sender's user ID
-                sellerEmail: user.email,
-            };
+                // Getting the values from the form
+                var transactionDescription = document.getElementById("transactiondescription").value;
+                var amount = document.getElementById("amount").value;
+                var user = firebase.auth().currentUser;
 
-          // Adding the data to Firebase Realtime Database
-              var newTransactionRef = firebase.database().ref('/transactionTemplates').push();
-              var transactionKey = newTransactionRef.key;
-              newTransactionRef.set(formData).then(function() {
-                  console.log("Transaction data saved successfully.");
-                
-              var customLink = WEBSITEURL+'/finishsetuptransaction?id='+transactionKey;
-              console.log("Transaction link: ", customLink);
-                
-              var linkMessageElement = document.getElementById('transactionlinkmessage');
-                linkMessageElement.textContent = 'Success! Your link is: ' + customLink;
+                // Creating an object to hold the form data
+                if (user && user.email) {
+                    var formData = {
+                        description: transactionDescription,
+                        amount: amount,
+                        sellerId: user.uid, // Add the sender's user ID
+                        sellerEmail: user.email,
+                    };
 
-              })
-              .catch(function(error) {
-                  console.log("Error saving transaction data: ", error);
-              });
-          } else {
-              console.log("User not signed in");
-              // Handle the case where the user is not signed in
-          }
-      });
-}});
+                    // Adding the data to Firebase Realtime Database
+                    var newTransactionRef = firebase.database().ref('/transactionTemplates').push();
+                    var transactionKey = newTransactionRef.key;
+                    newTransactionRef.set(formData).then(function() {
+                        console.log("Transaction data saved successfully.");
+
+                        var customLink = WEBSITEURL+'/finishsetuptransaction?id='+transactionKey;
+                        console.log("Transaction link: ", customLink);
+
+                        var linkMessageElement = document.getElementById('transactionlinkmessage');
+                        linkMessageElement.textContent = 'Success! Your link is: ' + customLink;
+                    })
+                    .catch(function(error) {
+                        console.log("Error saving transaction data: ", error);
+                    });
+                } else {
+                    console.log("User not signed in");
+                    // Handle the case where the user is not signed in
+                }
+            });
+        }
+    }
+});
+
 
 //Handle Transaction Confirmation page with link. specifically the display of data
 // slug = /finishsetuptransaction
