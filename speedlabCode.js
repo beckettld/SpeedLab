@@ -84,11 +84,12 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function showPopup(message) {
-    // Set the message inside the popup
     var messageElement = document.getElementById("popupMessage");
-    messageElement.textContent = message;
-
-    // Display the popup
+    if (messageElement) {
+        messageElement.textContent = message;
+    } else {
+        console.error("Popup message element not found");
+    }
     document.getElementById("myPopup").style.display = "block";
 }
 
