@@ -285,9 +285,6 @@ function displayUniqueTransactionData(uniqueTransactionData) {
         // Display the buyer's details
         document.getElementById('reviewBuyer').textContent = 'Buyer: ' + (uniqueTransactionData.buyerUserEmail || 'No buyer info');
 
-        // Assuming buyerFiles is an array, join the file names/keys with commas
-        document.getElementById('reviewFiles').textContent = 'Files: ' + (uniqueTransactionData.buyerFiles && uniqueTransactionData.buyerFiles.length > 0 ? uniqueTransactionData.buyerFiles.join(', ') : 'No files');
-
         // Display the seller's description
         document.getElementById('reviewSenderDescription').textContent = 'Seller Description: ' + (uniqueTransactionData.description || 'No description');
 
@@ -318,7 +315,9 @@ document.addEventListener("DOMContentLoaded", function() {
                     if (payButton) {
                         payButton.addEventListener('click', function() {
                             updateTransactionStateToPaid(transactionId).then(() => {
-                                window.location.href = WEBSITEURL+`/transactionpage?id=${transactionId}`;
+                                const redirectUrl = WEBSITEURL + `/transactionpage?id=${transactionId}`;
+                                console.log("Redirecting to:", redirectUrl);
+                                window.location.href = redirectUrl;
                             }).catch(error => {
                                 console.error("Error updating transaction state:", error);
                             });
@@ -635,7 +634,7 @@ function addAudioPlayers(fileUrls, containerId) {
             container.appendChild(playerContainer);
         });
     } else {
-        const noFilesMessage = document.createElement('p');
+        const noFilesMessage = document.createElement('p'); 
         noFilesMessage.textContent = 'No files available for playback.';
         container.appendChild(noFilesMessage);
     }
