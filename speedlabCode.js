@@ -576,7 +576,6 @@ function checkUserStatus() {
 
 function updateSellerFilesInTransaction(transactionId, fileKeys) {
     return new Promise((resolve, reject) => {
-        debugger;
         var transactionRef = firebase.database().ref('/uniqueTransactions/' + transactionId);
         transactionRef.update({ sellerFiles: fileKeys })
             .then(resolve)
@@ -624,6 +623,7 @@ function fetchFileUrlAndPlay(fileKey, containerId) {
 function addAudioPlayers(fileUrls, containerId) {
     const container = document.getElementById(containerId);
     container.innerHTML = ''; // Clear existing content
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
     if (fileUrls && fileUrls.length > 0) {
         fileUrls.forEach(url => {
@@ -631,7 +631,10 @@ function addAudioPlayers(fileUrls, containerId) {
             const playerContainer = document.createElement('div');
             playerContainer.style.width = '100%';
             playerContainer.style.marginBottom = '10px';
-            playerContainer.style.marginTop = '-75px';
+            
+            if (!isSafari) {
+                playerContainer.style.marginTop = '-75px';
+            }
             
             const videoPlayer = document.createElement('video');
             videoPlayer.controls = true;
