@@ -600,6 +600,7 @@ function displayTransactionPageData(transactionData) {
     document.getElementById('transactionpageamount').textContent = 'Amount: $' + (transactionData.amount || 'N/A');
     document.getElementById('transactionpagedescription').textContent = 'Description: ' + (transactionData.description || 'N/A');
     document.getElementById('transactionpagemessage').textContent = 'Message: ' + (transactionData.message || 'N/A');
+    document.getElementById('transactionpagestatus').textContent = 'Status: ' + (transactionData.currentState || 'N/A');
 }
 
 function fetchFileUrlAndPlay(fileKey, containerId) {
