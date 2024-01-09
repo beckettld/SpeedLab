@@ -462,7 +462,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 if (transactionData) {
                     displayTransactionPageData(transactionData);
                     transactionData.buyerFiles.forEach(fileKey => fetchFileUrlAndPlay(fileKey, 'transactionpagebuyerfiles'));
-                    transactionData.buyerFiles.forEach(fileKey => fetchFileUrlAndPlay(fileKey, 'transactionpagesellerfiles'));
+                    transactionData.sellerFiles.forEach(fileKey => fetchFileUrlAndPlay(fileKey, 'transactionpagesellerfiles'));
                 } else {
                     console.log("Buyer Transaction data not found for ID:", transactionId);
                 }
