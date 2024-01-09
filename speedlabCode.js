@@ -392,7 +392,6 @@ function updateTransactionTable(transactions, userId) {
     var buyerOngoingTableBody = document.getElementById('buyerOngoingTransactionTableBody');
     var buyerCompletedTableBody = document.getElementById('buyerCompletedTransactionTableBody');
 
-    console.log(document.getElementById('sellerOngoingTransactionTableBody'));
     // Clear existing table rows
     sellerOngoingTableBody.innerHTML = '';
     sellerCompletedTableBody.innerHTML = '';
@@ -412,20 +411,21 @@ function updateTransactionTable(transactions, userId) {
             const buyerEmail = transaction.buyerUserEmail || 'N/A';
             const isCompleted = transaction.currentState === 'complete';
 
-            var redirectUrl = transaction.sellerUserId === userId 
-            ? WEBSITEURL+`/transactionpageseller?id=${key}`
-            : WEBSITEURL+`/transactionpagebuyer?id=${key}`;
-
+            // If transaction is completed, redirect to transactionpagebuyer, else determine based on user role
+            var redirectUrl = isCompleted 
+                ? WEBSITEURL + `/transactionpagebuyer?id=${key}` 
+                : transaction.sellerUserId === userId 
+                    ? WEBSITEURL + `/transactionpageseller?id=${key}`
+                    : WEBSITEURL + `/transactionpagebuyer?id=${key}`;
 
             var row = document.createElement('tr');
             row.innerHTML = `
                 <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">${sellerEmail}</td>
                 <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">${buyerEmail}</td>
-                <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">${transaction.completed ? 'Completed' : 'In Progress'}</td>
+                <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;">${isCompleted ? 'Completed' : 'In Progress'}</td>
                 <td style="border: 1px solid #dddddd; text-align: left; padding: 8px;"><button onclick="window.location.href='${redirectUrl}'">Details</button></td>
             `;
 
- 
             // Categorize and append the row to the corresponding table
             if (transaction.sellerUserId === userId) {
                 if (isCompleted) {
@@ -444,6 +444,7 @@ function updateTransactionTable(transactions, userId) {
         }
     }
 }
+
 
 function redirectToTransactionDetails(transactionId) {
     window.location.href = WEBSITEURL+`/transactionpage?id=${transactionId}`;
