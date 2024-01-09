@@ -25,6 +25,12 @@ if (window.location.pathname === '/' || window.location.pathname === '') {
 // slug = /dashboard
 document.addEventListener('DOMContentLoaded', function() {
 if (window.location.pathname === '/dashboard') {
+
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('transactionComplete') === 'true') {
+        showTransactionCompletionPopup();
+    }
+
 var transactionButton = document.getElementById('initializeTransaction');
 if (transactionButton) {
     transactionButton.addEventListener('click', function(event) {
@@ -505,7 +511,9 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function boomer() {
-    console.log('button clicked, go boomer')
+    console.log('button clicked, go boomer');
+
+    showLoadingIndicator(); // Show the loading indicator
 
     var transactionId = getTransactionIdFromUrl();
     console.log("transactionId after button:" + transactionId);
@@ -514,34 +522,46 @@ function boomer() {
         console.log("Displaying Seller Transaction ID:", transactionId);
         fetchUniqueTransactionData(transactionId).then(transactionData => {
             if (transactionData) {
-                //displayTransactionPageData(transactionData);
-                //transactionData.buyerFiles.forEach(fileKey => fetchFileUrlAndPlay(fileKey, 'buyerAudioFilesContainer'));
                 var fileInput = document.getElementById('transactionpagesellerfilesubmit');
-        if (fileInput && fileInput.files.length > 0) {
-            uploadFiles(fileInput.files, transactionId).then(fileKeys => {
-                updateSellerFilesInTransaction(transactionId, fileKeys).then(() => {
-                    console.log('Seller files uploaded and updated in transaction.');
-                    updateTransactionStateToComplete(transactionId).then(() => {
-                        console.log('Transaction state updated to complete.');
-                        // Additional code to handle successful form submission, e.g., showing a success message or redirecting
+                if (fileInput && fileInput.files.length > 0) {
+                    uploadFiles(fileInput.files, transactionId).then(fileKeys => {
+                        updateSellerFilesInTransaction(transactionId, fileKeys).then(() => {
+                            console.log('Seller files uploaded and updated in transaction.');
+                            updateTransactionStateToComplete(transactionId).then(() => {
+                                console.log('Transaction state updated to complete.');
+                                
+                                // Hide the loading indicator and redirect
+                                hideLoadingIndicator();
+                                window.location.href = '/dashboard?transactionComplete=true';
+
+                            }).catch(error => {
+                                console.error('Error updating transaction state:', error);
+                                hideLoadingIndicator();
+                            });
+                        }).catch(error => {
+                            console.error('Error updating seller files in transaction:', error);
+                            hideLoadingIndicator();
+                        });
                     }).catch(error => {
-                        console.error('Error updating transaction state:', error);
+                        console.error('Error uploading files:', error);
+                        hideLoadingIndicator();
                     });
-                }).catch(error => {
-                    console.error('Error updating seller files in transaction:', error);
-                });
-            }).catch(error => {
-                console.error('Error uploading files:', error);
-            });
-        }
+                }
             } else {
                 console.log("Seller Transaction data not found for ID:", transactionId);
+                hideLoadingIndicator();
             }
         }).catch(error => {
             console.error("Error fetching Seller Transaction data:", error);
+            hideLoadingIndicator();
         });
     }
+}
 
+function showTransactionCompletionPopup() {
+    // You can use an existing function or create a new one to show the popup
+    // For example, using an alert or a custom modal
+    alert("Transaction Completed, view in completed transactions tab, money is being transferred expect in next few days.");
 }
 
 function checkUserStatus() {
