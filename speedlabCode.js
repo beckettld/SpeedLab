@@ -310,16 +310,14 @@ document.addEventListener("DOMContentLoaded", function() {
                     displayUniqueTransactionData(transactionData);
                     transactionData.buyerFiles.forEach(fileKey => fetchFileUrlAndPlay(fileKey, 'ReviewFilesContainer'));
                     console.log(transactionId)
-                    const uniqueURL = WEBSITEURL + `/transactionpage?id=${transactionId}`;
-                    console.log(uniqueURL)
                     // Add event listener to the payment button
                     var payButton = document.getElementById('payfortransaction');
                     if (payButton) {
                         payButton.addEventListener('click', function() {
                             updateTransactionStateToPaid(transactionId).then(() => {
-                                const redirectUrl = WEBSITEURL + `/transactionpage?id=${transactionId}`;
-                                console.log("Redirecting to:", uniqueURL);
-                                window.location.href = uniqueURL;
+                                const redirectUrl = WEBSITEURL + `/transactionpagebuyer?id=${transactionId}`;
+                                console.log("Redirecting to:", redirectUrl);
+                                window.location.href = redirectUrl;
                             }).catch(error => {
                                 console.error("Error updating transaction state:", error);
                             });
