@@ -116,10 +116,10 @@ document.addEventListener("DOMContentLoaded", function() {
     if (window.location.pathname === '/finishsetuptransaction') {
         var transactionId = getTransactionIdFromUrl();
 
+        // Display transaction data regardless of user sign-in status
         if (transactionId) {
             console.log("Transaction ID:", transactionId);
             fetchTransactionData(transactionId); // This function should handle displaying the transaction data
-            // Perform actions with the transactionId
         } else {
             console.log("No transaction ID found in URL");
         }
@@ -128,34 +128,43 @@ document.addEventListener("DOMContentLoaded", function() {
         if (finishSetupButton) {
             finishSetupButton.addEventListener('click', function(event) {
                 event.preventDefault(); // Prevent the default button action
-                
+
                 var user = firebase.auth().currentUser;
                 if (user) {
                     // User is signed in, proceed with the transaction setup
-                    showLoadingIndicator();
-                    createUniqueTransaction().then(uniqueTransactionId => {
-                        console.log("Unique transaction created");
-                        window.location.href = '/reviewtransaction?id=' + uniqueTransactionId;
-                    }).catch(error => {
-                        console.error("Failed to create unique transaction:", error);
-                        hideLoadingIndicator();
-                    });
+                    proceedWithTransactionSetup(transactionId);
                 } else {
                     // User is not signed in, initiate sign-in with redirect
-                    var provider = new firebase.auth.GoogleAuthProvider();
-                    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION).then(function() {
-                        // After sign in, redirect back to the same page with the same transaction ID
-                        var redirectUrl = WEBSITEURL + '/finishsetuptransaction?id=' + transactionId;
-                        firebase.auth().signInWithRedirect(provider);
-                        sessionStorage.setItem('postLoginRedirect', redirectUrl);
-                    }).catch(function(error) {
-                        console.error("Error setting persistence:", error);
-                    });
+                    initiateSignInWithRedirect(transactionId);
                 }
             });
         }
     }
 });
+
+function proceedWithTransactionSetup(transactionId) {
+    // Logic to proceed with transaction setup for signed-in users
+    showLoadingIndicator();
+    createUniqueTransaction().then(uniqueTransactionId => {
+        console.log("Unique transaction created");
+        window.location.href = '/reviewtransaction?id=' + uniqueTransactionId;
+    }).catch(error => {
+        console.error("Failed to create unique transaction:", error);
+        hideLoadingIndicator();
+    });
+}
+
+function initiateSignInWithRedirect(transactionId) {
+    var provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION).then(function() {
+        // After sign in, redirect back to the same page with the same transaction ID
+        var redirectUrl = WEBSITEURL + '/finishsetuptransaction?id=' + transactionId;
+        firebase.auth().signInWithRedirect(provider);
+        sessionStorage.setItem('postLoginRedirect', redirectUrl);
+    }).catch(function(error) {
+        console.error("Error setting persistence:", error);
+    });
+}
 
 // Handle redirect after sign in
 firebase.auth().getRedirectResult().then(function(result) {
