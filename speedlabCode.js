@@ -435,6 +435,7 @@ function updateTransactionTable(transactions, userId) {
     buyerOngoingTableBody.innerHTML = '';
     buyerCompletedTableBody.innerHTML = '';
 
+    var hasTransactions = false;
     for (var key in transactions) {
         if (transactions.hasOwnProperty(key)) {
             var transaction = transactions[key];
@@ -479,6 +480,20 @@ function updateTransactionTable(transactions, userId) {
                 }
             }
         }
+    }
+
+    function createNoTransactionRow(message) {
+        var row = document.createElement('tr');
+        row.innerHTML = `<td colspan="4" style="border: 1px solid #dddddd; text-align: center; padding: 8px;">${message}</td>`;
+        return row;
+    }
+
+    if (!hasTransactions) {
+        const message = "No transactions yet...";
+        sellerOngoingTableBody.appendChild(createNoTransactionRow(message));
+        sellerCompletedTableBody.appendChild(createNoTransactionRow(message));
+        buyerOngoingTableBody.appendChild(createNoTransactionRow(message));
+        buyerCompletedTableBody.appendChild(createNoTransactionRow(message));
     }
 }
 
