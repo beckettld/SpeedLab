@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
-//Handle Transaction Confirmation page with link. specifically the display of data
+//Handle Transaction Confirmation page with link, specifically the display of data
 // slug = /finishsetuptransaction
 document.addEventListener("DOMContentLoaded", function() {
     if (window.location.pathname === '/finishsetuptransaction') {
@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if (transactionId) {
             console.log("Transaction ID:", transactionId);
-            fetchTransactionData(transactionId);
+            fetchTransactionData(transactionId); // This function should handle displaying the transaction data
             // Perform actions with the transactionId
         } else {
             console.log("No transaction ID found in URL");
@@ -128,19 +128,47 @@ document.addEventListener("DOMContentLoaded", function() {
         if (finishSetupButton) {
             finishSetupButton.addEventListener('click', function(event) {
                 event.preventDefault(); // Prevent the default button action
-                showLoadingIndicator();
-
-                createUniqueTransaction().then(uniqueTransactionId => {
-                    console.log("Unique transaction created");
-                    window.location.href = '/reviewtransaction?id=' + uniqueTransactionId;
-                }).catch(error => {
-                    console.error("Failed to create unique transaction:", error);
-                    hideLoadingIndicator();
-                });
+                
+                var user = firebase.auth().currentUser;
+                if (user) {
+                    // User is signed in, proceed with the transaction setup
+                    showLoadingIndicator();
+                    createUniqueTransaction().then(uniqueTransactionId => {
+                        console.log("Unique transaction created");
+                        window.location.href = '/reviewtransaction?id=' + uniqueTransactionId;
+                    }).catch(error => {
+                        console.error("Failed to create unique transaction:", error);
+                        hideLoadingIndicator();
+                    });
+                } else {
+                    // User is not signed in, initiate sign-in with redirect
+                    var provider = new firebase.auth.GoogleAuthProvider();
+                    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION).then(function() {
+                        // After sign in, redirect back to the same page with the same transaction ID
+                        var redirectUrl = WEBSITEURL + '/finishsetuptransaction?id=' + transactionId;
+                        firebase.auth().signInWithRedirect(provider);
+                        sessionStorage.setItem('postLoginRedirect', redirectUrl);
+                    }).catch(function(error) {
+                        console.error("Error setting persistence:", error);
+                    });
+                }
             });
         }
     }
 });
+
+// Handle redirect after sign in
+firebase.auth().getRedirectResult().then(function(result) {
+    if (result.user) {
+        var redirectUrl = sessionStorage.getItem('postLoginRedirect');
+        if (redirectUrl) {
+            window.location.href = redirectUrl;
+        }
+    }
+}).catch(function(error) {
+    console.log("Error after sign in redirect:", error);
+});
+
 
 function showLoadingIndicator() {
     var indicator = document.getElementById('loadingIndicator');
@@ -631,7 +659,7 @@ function addAudioPlayers(fileUrls, containerId) {
             const playerContainer = document.createElement('div');
             playerContainer.style.width = '100%';
             playerContainer.style.marginBottom = '10px';
-            
+
             if (!isSafari) {
                 playerContainer.style.marginTop = '-75px';
             }
