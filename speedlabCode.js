@@ -435,7 +435,11 @@ function updateTransactionTable(transactions, userId) {
     buyerOngoingTableBody.innerHTML = '';
     buyerCompletedTableBody.innerHTML = '';
 
-    var hasTransactions = false;
+    var countSellerOngoing = 0;
+    var countSellerCompleted = 0;
+    var countBuyerOngoing = 0;
+    var countBuyerCompleted = 0;
+
     for (var key in transactions) {
         if (transactions.hasOwnProperty(key)) {
             var transaction = transactions[key];
@@ -479,6 +483,21 @@ function updateTransactionTable(transactions, userId) {
                     buyerOngoingTableBody.appendChild(row.cloneNode(true));
                 }
             }
+
+            if (transaction.sellerUserId === userId) {
+                if (isCompleted) {
+                    countSellerCompleted++;
+                } else {
+                    countSellerOngoing++;
+                }
+            }
+            if (transaction.buyerUserId === userId) {
+                if (isCompleted) {
+                    countBuyerCompleted++;
+                } else {
+                    countBuyerOngoing++;
+                }
+            }
         }
     }
 
@@ -488,13 +507,19 @@ function updateTransactionTable(transactions, userId) {
         return row;
     }
 
-    if (!hasTransactions) {
-        const message = "No transactions yet...";
-        sellerOngoingTableBody.appendChild(createNoTransactionRow(message));
-        sellerCompletedTableBody.appendChild(createNoTransactionRow(message));
-        buyerOngoingTableBody.appendChild(createNoTransactionRow(message));
-        buyerCompletedTableBody.appendChild(createNoTransactionRow(message));
+    if (countSellerOngoing === 0) {
+        sellerOngoingTableBody.appendChild(createNoTransactionRow("No ongoing transactions yet..."));
     }
+    if (countSellerCompleted === 0) {
+        sellerCompletedTableBody.appendChild(createNoTransactionRow("No completed transactions yet..."));
+    }
+    if (countBuyerOngoing === 0) {
+        buyerOngoingTableBody.appendChild(createNoTransactionRow("No ongoing transactions yet..."));
+    }
+    if (countBuyerCompleted === 0) {
+        buyerCompletedTableBody.appendChild(createNoTransactionRow("No completed transactions yet..."));
+    }
+
 }
 
 
