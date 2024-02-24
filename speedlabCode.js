@@ -1,8 +1,9 @@
   const WEBSITEURL = "https://speedlab.webflow.io"
   
   
-  // Function to update usernameHeader
+// Function to update usernameHeader
   function updateUsernameHeader(user) {
+    console.log("updateUsernameHeader is running")
     const usernameHeader = document.getElementById('usernameHeader');
     if (user && usernameHeader) {
       usernameHeader.textContent = user.email; // Set to user's email
