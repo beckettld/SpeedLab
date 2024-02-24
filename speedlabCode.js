@@ -14,7 +14,9 @@
 
 // Set up sign-in logic
 if (window.location.pathname === '/' || window.location.pathname === '') {
+    console.log("User sign-in logic pre-dom")
   document.getElementById('LogInButton').addEventListener('click', function() {
+    console.log("User sign-in logic post-dom")
     var provider = new firebase.auth.GoogleAuthProvider();
     firebase.auth().signInWithRedirect(provider);
   });
